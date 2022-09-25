@@ -1,0 +1,30 @@
+.details-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.details-item {
+  text-align: start;
+}
+
+.details-header {
+  color: var(--blue);
+  font-weight: 800;
+  font-size: 1rem;
+  border-bottom: 1px solid var(--blue);
+  margin-top: 0;
+}
+
+.details-logo {
+  height: 7rem;
+}
+
+.details-img {
+  width: 15rem;
+  margin: 1rem;
+}
+
+.details-link {
+  margin: 0 1rem;
+}
