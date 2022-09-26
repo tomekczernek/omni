@@ -25,7 +25,7 @@
 }
 
 .disabled-button {
-  background-color: var(--gray);
+  background-color: var(--gray) !important;
 }
 
 .button:hover {

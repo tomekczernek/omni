@@ -15,7 +15,7 @@ export function FlightListPagination(props: Props) {
     pagination;
 
   const queryClient = useQueryClient();
-  queryClient.setQueryData(["currentPage"], page);
+  queryClient.setQueryData(["searchedPage"], page);
 
   const handleNextPage = () => {
     if (nextPage) {
@@ -33,9 +33,9 @@ export function FlightListPagination(props: Props) {
     <div className="pagination">
       <button
         disabled={!hasPrevPage}
-        className={`${
+        className={`button pagination-button ${
           !hasPrevPage ? "disabled-button" : ""
-        } button pagination-button`}
+        }`}
         onClick={handlePrevPage}
       >
         Previous
@@ -45,9 +45,9 @@ export function FlightListPagination(props: Props) {
 
       <button
         disabled={!hasNextPage}
-        className={`${
+        className={`button pagination-button ${
           !hasNextPage ? "disabled-button" : ""
-        } button pagination-button`}
+        }`}
         onClick={handleNextPage}
       >
         Next

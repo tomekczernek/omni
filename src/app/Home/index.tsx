@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { delayText } from "app/utils";
 import { getSearchData } from "api/index";
-import { SearchParamsType } from "app/types";
+import { SearchFlightsType, SearchParamsType } from "app/types";
 
 import { FlightList } from "./FlightList";
 
@@ -17,6 +17,8 @@ export function Home() {
     searchPage: queryClient.getQueryData(["searchedPage"]),
   });
 
+  const [searchData, setSearchData] = useState<SearchFlightsType>(null);
+
   const serachText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;
 
@@ -26,19 +28,27 @@ export function Home() {
         searchText: searchValue,
         searchPage: 1,
       });
-      queryClient.setQueryData(["searchedText"], searchValue);
+    } else {
+      setSearchData(null);
     }
+    queryClient.setQueryData(["searchedText"], searchValue);
   };
 
-  const { data, isFetching, error } = useQuery(
+  const { data, isFetching, error, refetch } = useQuery(
     ["mission", searchParams],
     () => getSearchData(searchParams),
     {
-      refetchOnWindowFocus: false,
-      retryOnMount: false,
-      refetchOnMount: false,
+      enabled: false,
     }
   );
+
+  useEffect(() => {
+    if (searchParams.searchText && searchParams.searchPage) refetch();
+  }, [searchParams]);
+
+  useEffect(() => {
+    setSearchData(data);
+  }, [data]);
 
   return (
     <>
@@ -52,15 +62,23 @@ export function Home() {
         />
       </div>
 
-      <div className="items-container">
-        {isFetching && <p>Loading...</p>}
-        {error && <p>An error has occurred</p>}
-        {data?.docs.length ? (
-          <FlightList launches={data} setSearchParams={setSearchParams} searchParams={searchParams}/>
-        ) : (
-          <p>No data</p>
-        )}
-      </div>
+      {isFetching && (
+        <div className="items-container">
+          <p>Loading...</p>
+        </div>
+      )}
+      {error && (
+        <div className="items-container">
+          <p>An error has occurred</p>
+        </div>
+      )}
+      {searchData && (
+        <FlightList
+          launches={searchData}
+          setSearchParams={setSearchParams}
+          searchParams={searchParams}
+        />
+      )}
     </>
   );
 }

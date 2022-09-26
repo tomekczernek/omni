@@ -15,10 +15,14 @@ export function FlightList(props: Props) {
   const { launches, setSearchParams, searchParams } = props;
 
   return (
-    <>
-      {launches?.docs.map((item: FlightType) => (
-        <FlightItem key={item.id} item={item} />
-      ))}
+    <div className="items-container">
+      {launches.docs.length ? (
+        launches.docs.map((item: FlightType) => (
+          <FlightItem key={item.id} item={item} />
+        ))
+      ) : (
+        <p>No data</p>
+      )}
 
       {launches?.totalDocs > 10 && (
         <FlightListPagination
@@ -27,6 +31,6 @@ export function FlightList(props: Props) {
           searchParams={searchParams}
         />
       )}
-    </>
+    </div>
   );
 }
